@@ -1,0 +1,76 @@
+<mat-card>
+    <mat-card-title>Cadastrar Perfil</mat-card-title>
+    <form #form="ngForm" (ngSubmit)="salvarPerfil(form)">
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <mat-form-field>
+            <input matInput placeholder="Nome" [(ngModel)]="perfil.nome" name="nome">
+          </mat-form-field>
+        </div>
+      </div>
+  
+      <!-- Checkbox para campo "ativo" -->
+      <div class="form-group">
+        <mat-checkbox [(ngModel)]="perfil.ativo" name="ativo">Ativo</mat-checkbox>
+      </div>
+
+     <!-- Checkbox para campo "ativo" -->
+     <div class="form-group">
+       <mat-checkbox [(ngModel)]="perfil.admin" name="ativo">Administrador</mat-checkbox>
+     </div>
+  
+
+      <!-- Botões -->
+      <div class="row">
+        <div class="col-md-12">
+          <!-- Botões -->
+          <div class="example-button-row form-group">
+            <button mat-button type="submit" color="primary" [disabled]="isSalvando">Salvar</button>
+            <button mat-button (click)="limparPerfil()" color="warn">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="example-container mat-elevation-z8">
+      <mat-table #table [dataSource]="dataSource" matSort>
+    
+        <!-- Coluna de Nome -->
+        <ng-container matColumnDef="nome">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Nome</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.nome}}</mat-cell>
+        </ng-container>
+    
+        <!-- Coluna de CPF -->
+        <ng-container matColumnDef="administrador">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Administrador</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.admin ? 'Sim' : 'Não'}}</mat-cell>
+        </ng-container>
+    
+        <!-- Coluna de Ativo -->
+        <ng-container matColumnDef="ativo">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Ativo</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.ativo ? 'Sim' : 'Não'}}</mat-cell>
+        </ng-container>
+    
+        <!-- Coluna de Ações (Editar e Excluir) -->
+        <ng-container matColumnDef="acoes">
+          <mat-header-cell *matHeaderCellDef>Ações</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <button mat-icon-button color="primary" class="custom-button" (click)="editarPerfil(element)">
+              <mat-icon class="icon">edit</mat-icon>
+              <mat-icon class="spinner"  fontSet="fontawesome" fontIcon="fas fa-spinner fa-spin"></mat-icon>
+            </button>
+            
+            <button mat-icon-button color="warn" class="custom-button" (click)="excluirPerfil(element)">
+              <mat-icon class="icon">delete</mat-icon>
+              <mat-icon class="spinner"fontSet="fontawesome" fontIcon="fas fa-spinner fa-spin"></mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+    
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+    </div>
+  </mat-card>
+  

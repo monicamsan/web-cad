@@ -1,0 +1,102 @@
+<mat-card>
+    <mat-card-title>Cadastrar Usuário</mat-card-title>
+    <form #form="ngForm" (ngSubmit)="salvarUsuario(form)">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <mat-form-field>
+              <input matInput placeholder="Nome" [(ngModel)]="usuario.nome" name="nome" required [disabled]="!isAdmin">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <mat-form-field>
+              <input matInput type="password" placeholder="Senha" [(ngModel)]="usuario.senha" name="senha" required [disabled]="!isAdmin">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <mat-form-field>
+              <input matInput placeholder="CPF" [(ngModel)]="usuario.cpf" name="cpf" required [disabled]="!isAdmin">
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Checkbox para campo "ativo" -->
+      <div class="form-group">
+        <mat-checkbox [(ngModel)]="usuario.ativo" name="ativo" required [disabled]="!isAdmin" >Ativo</mat-checkbox>
+      </div>
+  
+      <!-- Lista de perfis -->
+      <div class="form-group">
+        <mat-form-field>
+          <mat-label>Perfis</mat-label>
+          <mat-select [(ngModel)]="selectedPerfil" name="perfis" required [disabled]="!isAdmin">
+            <mat-option *ngFor="let perfil of perfis" [value]="perfil">{{perfil.nome}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div><br>
+  
+      <div class="row" *ngIf="isAdmin">
+        <div class="col-md-12">
+          <!-- Botões -->
+          <div class="example-button-row form-group">
+            <button mat-button type="submit" color="primary" [disabled]="isSalvando">Salvar</button>
+            <button mat-button (click)="limparUsuario()" color="warn">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div class="example-container mat-elevation-z8">
+      <mat-table #table [dataSource]="dataSource" matSort *ngIf="isAdmin">
+    
+        <!-- Coluna de Nome -->
+        <ng-container matColumnDef="nome">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Nome</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.nome}}</mat-cell>
+        </ng-container>
+    
+        <!-- Coluna de CPF -->
+        <ng-container matColumnDef="cpf">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>CPF</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.cpf}}</mat-cell>
+        </ng-container>
+    
+        <!-- Coluna de Ativo -->
+        <ng-container matColumnDef="ativo">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Ativo</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.ativo ? 'Sim' : 'Não'}}</mat-cell>
+        </ng-container>
+    
+        <!-- Coluna de Perfis -->
+        <ng-container matColumnDef="perfil">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Perfil</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.perfil.nome || '-'}} </mat-cell>
+        </ng-container>
+    
+        <!-- Coluna de Ações (Editar e Excluir) -->
+        <ng-container matColumnDef="acoes">
+          <mat-header-cell *matHeaderCellDef>Ações</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <button mat-icon-button color="primary" class="custom-button" (click)="editarUsuario(element)">
+              <mat-icon class="icon">edit</mat-icon>
+              <mat-icon class="spinner"  fontSet="fontawesome" fontIcon="fas fa-spinner fa-spin"></mat-icon>
+            </button>
+            
+            <button mat-icon-button color="warn" class="custom-button" (click)="excluirUsuario(element)">
+              <mat-icon class="icon">delete</mat-icon>
+              <mat-icon class="spinner"fontSet="fontawesome" fontIcon="fas fa-spinner fa-spin"></mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+    
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+    </div>
+  </mat-card>
+  
